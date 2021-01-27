@@ -2,7 +2,7 @@ import os
 import sys
 import httplib2
 import urllib
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 from bs4 import BeautifulSoup, SoupStrainer
 import time
 
@@ -85,9 +85,9 @@ if __name__ == "__main__":
 
 	# write all links found to a text file
 	folder = os.path.dirname(os.path.abspath(__file__))
-	file1 = os.path.join(folder, 'main_urls.txt')
-	file2 = os.path.join(folder, 'externals.txt')
-	file3 = os.path.join(folder, 'weird.txt')
+	file1 = os.path.join(folder, 'main_urls_' + urlsplit(url).netloc + '.txt')
+	file2 = os.path.join(folder, 'externals_' + urlsplit(url).netloc + '.txt')
+	file3 = os.path.join(folder, 'weird_' + urlsplit(url).netloc + '.txt')
 
 	with open(file1, "w+") as f:
 		for x in sorted(s):
