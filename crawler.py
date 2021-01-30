@@ -30,30 +30,28 @@ def rec(current_url, url):
 		for link in BeautifulSoup(response, 'html.parser', parse_only=SoupStrainer('a')):
 			if link.has_attr('href'):
 
-				if ("#comment" not in link['href']) and ("#respond" not in link['href']):
+				# remove the ending '/' to prevent duplicates
+				link['href'] = link['href'].rstrip('/')
 
-					# remove the ending '/' to prevent duplicates
-					link['href'] = link['href'].rstrip('/')
-
-					# absolute links
-					if link['href'][:4] == 'http':
-						if (url not in link['href']):
-							external_links.add(link['href'])
-						else:
-							main_urls.append(link['href'])
-
-					# relative links
-					elif (len(link['href']) > 1) and (link['href'][0] == '/'):
-						# join main url with relative link
-						new_url = urljoin(current_url, link['href'])
-						main_urls.append(new_url)
-
-					# weird links
+				# absolute links
+				if link['href'][:4] == 'http':
+					if (url + '/' in link['href']):
+						main_urls.append(link['href'])
 					else:
-						if len(link['href']) > 0 and link['href'][0] == '#':
-							main_urls.append(urljoin(current_url, link['href']))
-						else:
-							weird_links.add(link['href'])
+						external_links.add(link['href'])
+
+				# relative links
+				elif (len(link['href']) > 0) and ((link['href'][0] == '/') or (link['href'][0] == '#')):
+					# join main url with relative link
+					new_url = urljoin(current_url, link['href'])
+					if (url in new_url):
+						main_urls.append(new_url)
+					else:
+						external_links.add(link['href'])
+
+				# weird links
+				else:
+					weird_links.add(link['href'])
 
 	except TypeError:
 		print("Undefined coding")
