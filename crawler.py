@@ -11,9 +11,6 @@ main_urls = []
 external_links = set()
 weird_links = set()
 
-# Problems:
-# - not recognizing the main site url
-
 def rec(current_url, url):
 
 	# make HTTP connection
