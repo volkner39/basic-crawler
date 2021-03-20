@@ -26,9 +26,10 @@ external_links = set()
 weird_links = set()
 
 # black-listed words
-skip = {"&url=", "#comment", "#respond", "#atom", "#source", "#write", "#collapse", ".svg", ".jpg", ".jpeg", ".png", ".gif"}
+skip = {"&url=", "#", ".svg", ".jpg", ".jpeg", ".png", ".gif"}
 
 # checks if main url is inside the current url we're looking at
+# excluding re-directs and web-archives
 def check_url(main_url, current_url):
 	res = current_url.split(main_url)
 	return res[0] == "" and len(res) == 2
@@ -40,7 +41,7 @@ def rec(current_url, url):
 		http = httplib2.Http()
 		status, response = http.request(current_url)
 	except:
-		print("Couldn't connect lol...")
+		print("Couldn't connect...")
 		weird_links.add(current_url)
 		return
 
